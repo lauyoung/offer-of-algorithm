@@ -1,138 +1,139 @@
 
 #include <iostream>
 #include <vector>
+#include <queue>
 #include <cassert>
 using namespace std;
 
 //面试题3：二维数组中的查找
-//#include <iostream>
-//#include <vector>
-//using namespace std;
-//#define M 100
-//#define N 100
-//
-//#include <cassert>
-//
-//bool Find(int array[][N], int row, int col, int key)
-//{
-//	assert(row > 0 && col > 0);
-//
-//	bool found = false;
-//	int i = 0, j = col - 1;
-//	while (i <row && j >= 0)
-//	{
-//		if (array[i][j] == key)
-//		{
-//			found = true;
-//			break;
-//		}
-//		else if (array[i][j] > key)
-//		{
-//			j--;
-//		}
-//		else
-//		{
-//			i++;
-//		}
-//
-//	}
-//	return found;
-//}
-//
-////测试用例：输入4x4的数组，输入要查找的数据，返回1(存在)或者0(不存在)
-////4 4
-////1  2  8  9
-////2  4  9  12
-////4  7  10 13
-////6  8  11 15
-//int main()
-//{
-//	int array[M][N];
-//
-//	int m, n, key;
-//	cin >> m;
-//	cin >> n;
-//
-//	for (int i = 0;i < m;++i)
-//		for (int j = 0;j < n;++j)
-//		{
-//			cin >> array[i][j];
-//		}
-//	cin >> key;
-//	cout << Find(array, m, n, key) << endl;
-//	return 0;
-//}
+#include <iostream>
+#include <vector>
+using namespace std;
+#define M 100
+#define N 100
+
+#include <cassert>
+
+bool Find(int array[][N], int row, int col, int key)
+{
+	assert(row > 0 && col > 0);
+
+	bool found = false;
+	int i = 0, j = col - 1;
+	while (i <row && j >= 0)
+	{
+		if (array[i][j] == key)
+		{
+			found = true;
+			break;
+		}
+		else if (array[i][j] > key)
+		{
+			j--;
+		}
+		else
+		{
+			i++;
+		}
+
+	}
+	return found;
+}
+
+//测试用例：输入4x4的数组，输入要查找的数据，返回1(存在)或者0(不存在)
+//4 4
+//1  2  8  9
+//2  4  9  12
+//4  7  10 13
+//6  8  11 15
+int test6()
+{
+	int array[M][N];
+
+	int m, n, key;
+	cin >> m;
+	cin >> n;
+
+	for (int i = 0;i < m;++i)
+		for (int j = 0;j < n;++j)
+		{
+			cin >> array[i][j];
+		}
+	cin >> key;
+	cout << Find(array, m, n, key) << endl;
+	return 0;
+}
 
 //面试题四：请实现一个函数，将一个字符串中的空格替换成“ % 20”。例如，当
 //字符串为We Are Happy.则经过替换之后的字符串为We % 20Are % 20Happy。
-//void replaceSpace(char *str, int Length)
-//{
-//
-//	assert(str != NULL || Length > 0);
-//
-//	int num = 0;
-//	int length = 0;
-//	int i = 0;
-//	while ('\0' != str[i])
-//	{
-//		++length;
-//		if (str[i] == ' ')
-//		{
-//			num++;
-//		}
-//		i++;
-//	}
-//	int NewLength = 2 * num + length;
-//	int PrevofArray = length;
-//	while (PrevofArray >= 0 && NewLength > PrevofArray)
-//	{
-//		if (str[PrevofArray] == ' ')
-//		{
-//			str[NewLength--] = '0';
-//			str[NewLength--] = '2';
-//			str[NewLength--] = '%';
-//		}
-//		else
-//		{
-//			str[NewLength--] = str[PrevofArray];
-//		}
-//		--PrevofArray;
-//	}
-//}
-//const int MAX = 100;
-////测试用例：
-////特殊情况：1，无空格2，一个空格3，多个空格
-//int main()
-//{
-//	//无空格
-//	char str3[MAX] = "iamabadboy";
-//	cout << str3 << endl;
-//
-//	replaceSpace(str3, strlen(str3));
-//	cout << str3 << endl;
-//
-//
-//	char str[MAX] = "we are happy.";
-//	cout << str << endl;
-//
-//	replaceSpace(str, strlen(str));
-//	cout << str << endl;
-//
-//	//一个空格
-//	char str1[MAX] = " ";
-//	cout << str1 << endl;
-//
-//	replaceSpace(str1, strlen(str1));
-//	cout << str1<< endl;
-//
-//	//多个空格。五个
-//	char str2[MAX] = "     ";
-//	cout << str2 << endl;
-//
-//	replaceSpace(str2, strlen(str2));
-//	cout << str2 << endl;
-//	return 0;
-//}
+void replaceSpace(char *str, int Length)
+{
+
+	assert(str != NULL || Length > 0);
+
+	int num = 0;
+	int length = 0;
+	int i = 0;
+	while ('\0' != str[i])
+	{
+		++length;
+		if (str[i] == ' ')
+		{
+			num++;
+		}
+		i++;
+	}
+	int NewLength = 2 * num + length;
+	int PrevofArray = length;
+	while (PrevofArray >= 0 && NewLength > PrevofArray)
+	{
+		if (str[PrevofArray] == ' ')
+		{
+			str[NewLength--] = '0';
+			str[NewLength--] = '2';
+			str[NewLength--] = '%';
+		}
+		else
+		{
+			str[NewLength--] = str[PrevofArray];
+		}
+		--PrevofArray;
+	}
+}
+const int MAX = 100;
+//测试用例：
+//特殊情况：1，无空格2，一个空格3，多个空格
+int test5()
+{
+	//无空格
+	char str3[MAX] = "iamabadboy";
+	cout << str3 << endl;
+
+	replaceSpace(str3, strlen(str3));
+	cout << str3 << endl;
+
+
+	char str[MAX] = "we are happy.";
+	cout << str << endl;
+
+	replaceSpace(str, strlen(str));
+	cout << str << endl;
+
+	//一个空格
+	char str1[MAX] = " ";
+	cout << str1 << endl;
+
+	replaceSpace(str1, strlen(str1));
+	cout << str1<< endl;
+
+	//多个空格。五个
+	char str2[MAX] = "     ";
+	cout << str2 << endl;
+
+	replaceSpace(str2, strlen(str2));
+	cout << str2 << endl;
+	return 0;
+}
 
 
 //面试题五：从尾到头打印链表
@@ -340,11 +341,11 @@ int test2()
 }
 //面试题七：用两个栈来实现一个队列，完成队列的Push和Pop操作。
 //队列中的元素为int类型。
-
 #include<iostream>
 #include<stack>
 using namespace std;
 
+template<typename T>
 class MyQueue
 {
 public:
@@ -374,13 +375,13 @@ public:
 	}
 
 private:
-	stack<int> stack1;
-	stack<int> stack2;
+	stack<T> stack1;
+	stack<T> stack2;
 };
 //测试用例：查看出队列元素是否为第一次进去的。
 int test3()
 {
-	MyQueue qu;
+	MyQueue<int> qu;
 	qu.push(1);
 	qu.push(2);
 	qu.push(3);
@@ -389,6 +390,57 @@ int test3()
 
 	int ret = qu.pop();
 	cout << ret << endl;
+	return 0;
+}
+
+//面试题扩展:用两个队列实现栈
+
+template<typename T>
+class Stack
+{
+public:
+	void push(const T& data)
+	{
+		qu1.push(data);
+	}
+	T pop()
+	{
+		if (qu1.size()==0)
+		{
+			throw new exception("the stack is empty");
+		}
+
+		T temp;
+		while (!qu1.empty())
+		{
+			temp = qu1.front();
+			qu1.pop();
+			if (!qu1.empty())
+			{
+				qu2.push(temp);
+			}
+		}
+		swap(qu1, qu2);
+		return temp;
+	}
+private:
+	queue<T> qu1;
+	queue<T> qu2;
+};
+
+
+int test8()
+{
+
+	Stack<int> st;
+	st.push(1);
+	st.push(2);
+	st.push(3);
+	cout << st.pop() << endl;
+	cout << st.pop() << endl;
+	cout << st.pop() << endl;
+	cout << st.pop() << endl;
+
 	return 0;
 }
 //面试题8：旋转数组的最小值
@@ -543,45 +595,50 @@ int test4()
 //		return 1;
 //	return Fibonacci(n - 1) + Fibonacci(n - 2);
 //}
-//int Fibonacci(int n) 
-//{
-//	int arr[2] = { 0,1 };
-//	if (n <= 2)
-//	{
-//		return arr[n];    
-//	}
-//	int curr = arr[0];
-//	int next = arr[1];
-//	int ret = 0;
-//	for (int i = 2;i < n;++i)
-//	{
-//		ret = curr + next;
-//		curr = next;
-//		next = ret;
-//	}
-//	return ret;
-//}
+int Fibonacci(int n)
+{
+	int arr[2] = { 0,1 };
+	if (n <= 2)
+	{
+		return arr[n];
+	}
+	int curr = arr[0];
+	int next = arr[1];
+	int ret = 0;
+	for (int i = 2;i < n;++i)
+	{
+		ret = curr + next;
+		curr = next;
+		next = ret;
+	}
+	return ret;
+}
 
+//位运算练习题，输入一个数，用A-Z表示（26进制）
+int function(char str[])
+{
+	int size = strlen(str);
 
+	int sum = 0;
+	for (int i = 0;i < size;++i)
+	{
+		int temp = str[i] - 'A';
+
+		if (temp<0 || temp>26)
+		{
+			cout << "error input" << endl;
+		}
+		sum = 26 * sum + temp + 1;
+	}
+	return sum;
+}
+void test9()
+{
+	char str[22];
+	cin >> str;
+	cout << function(str) << endl;
+}
 //面试题10：二进制中1的个数
-
-//存在缺陷的代码
-//int NumOf1(int num)
-//{
-//	int i = 0;
-//	int j;
-//	int count = 0;
-//	while (i < 32)
-//	{
-//		j = 1 << i;
-//		if (j&num)
-//		{
-//			count++;
-//		}
-//		++i;
-//	}
-//	return count;
-//}
 
 int Numof1(int num)
 {
@@ -617,10 +674,84 @@ int BitCount(int n)
 
 	return n;
 }
-int main()
+int test7()
 {
 	cout << BitCount(-1) << endl;
 	cout << NumOf1(-1) << endl;
 	return 0;
 }
+//数值的整数次方
 
+
+//两种版本的求次方算法。
+double powerwithunsignedexp(double base, unsigned int absexp)
+{
+	double result = 1.0;
+	for (int i = 0;i < absexp;++i)
+	{
+		result *= base;
+	}
+	return result;
+}
+
+//版本二，递归算法
+double powerwithunsignedexp_2(double base, unsigned int absexp)
+{
+	if (absexp ==0)
+	{
+		return 1;
+	}
+	if (absexp==1)
+	{
+		return base;
+	}
+
+	double result = powerwithunsignedexp_2(base, absexp >> 1);
+	result *= result;
+	if (absexp & 0x1 == 1)
+		result *= base;
+
+	return result;
+}
+bool _equal(double num1, double num2)
+{
+	if ((num1 - num2 > -0.0000001) && (num1 - num2) < 0.0000001)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+double power(double base, int exp)
+{
+	if (exp == 0)
+	{
+		return 1.0;
+	}
+	if (_equal(base, 0.0) && exp<0)
+	{
+		cout << "input invalid" << endl;
+		return 0;
+	}
+
+	unsigned int absexp = (unsigned int)(exp);
+
+	if (exp<0)
+	{
+		absexp = (unsigned int)(-exp);
+	}
+	double result = powerwithunsignedexp(base, absexp);
+	
+	if (exp < 0)
+		result = 1.0 / result;
+
+	return result;
+
+}
+
+void test10()
+{
+	cout << power(0.0, -1) << endl;
+	cout << power(3.3,3) << endl;
+	cout << power(3.3,-3) << endl;
+}
