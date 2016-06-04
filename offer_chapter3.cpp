@@ -1,10 +1,7 @@
 #include<iostream>
 using namespace std;
 
-
-
 //面试题11：数值的整数次方
-
 
 //两种版本的求次方算法。
 double powerwithunsignedexp(double base, unsigned int absexp)
@@ -474,7 +471,7 @@ void test3()
 	}
 
 }
-//面试题15：单链表逆置
+//面试题16：单链表逆置
 ListNode* Reverse(ListNode* head)
 {
 	if (head == NULL || head->_next == NULL)
@@ -515,8 +512,167 @@ void test5()
 	cout << "NULL" << endl;
 
 }
-int main()
+
+//扩展题：单链表逆置的递归写法
+void Reverse_R(ListNode* prev, ListNode* head,ListNode*& newNode)
 {
-	test5();
-	return 0;
+	//prev初始化NULL，head为头指针
+	if (head == NULL)
+	{
+		newNode = prev;
+		return;
+	}
+	Reverse_R(head, head->_next,newNode);
+	head->_next = prev;
+}
+void test6()
+{
+	List lt;
+	lt.Insert(1);
+	lt.Insert(2);
+	lt.Insert(3);
+	lt.Insert(4);
+	lt.Insert(5);
+	ListNode* ret;
+	Reverse_R(NULL,lt._head,ret);
+	while (ret)
+	{
+		cout << ret->_value << "->";
+		ret = ret->_next;
+	}
+	cout << "NULL" << endl;
+
+}
+//面试题17：合并两个排序链表
+//递归写法
+ListNode* Merge_R(ListNode* head1, ListNode* head2)
+{
+	if (head1 == NULL)
+		return head2;
+
+	if (head2 == NULL)
+		return head1;
+
+	ListNode* newNode = NULL;
+	if (head1->_value < head2->_value)
+	{
+		newNode = head1;
+		newNode->_next = Merge_R(head1->_next, head2);
+	}
+	else
+	{
+		newNode = head2;
+		newNode->_next = Merge_R(head1, head2->_next);
+	}
+	return newNode;
+}
+//迭代写法
+void Merge(ListNode* head1, ListNode* head2,ListNode*& newHead)
+{
+	if (head1 == NULL)
+		newHead =head2;
+
+	if (head2 == NULL)
+		newHead= head1;
+
+	ListNode* cur = newHead;
+	while (head1 && head2)
+	{
+		if(head1->_value<head2->_value)
+		{
+			if (cur == NULL)
+			{
+				cur = head1;
+				newHead = cur;
+			}
+			else
+			{
+				cur->_next = head1;
+				cur = cur->_next;
+			}
+			head1 = head1->_next;
+		} 
+		else
+		{
+			if (cur == NULL)
+			{
+				cur = head2;
+				newHead = cur;
+			}
+			else
+			{
+				cur->_next = head2;
+				cur = cur->_next;
+			}
+			head2 = head2->_next;
+		}
+	}
+	if (head1 == NULL)
+		cur->_next = head2;
+
+	if (head2 == NULL)
+		cur->_next = head1;
+
+}
+void test7()
+{
+	List lt;
+	lt.Insert(1);
+	lt.Insert(3);
+	lt.Insert(5);
+	lt.Insert(7);
+	lt.Insert(9);
+
+	List lt2;
+	lt2.Insert(2);
+	lt2.Insert(4);
+	lt2.Insert(6);
+	lt2.Insert(8);
+	lt2.Insert(10);
+
+	ListNode* ret = NULL;
+	Merge(lt._head, lt2._head,ret);
+
+	while (ret)
+	{
+		cout << ret->_value << "->";
+		ret = ret->_next;
+	}
+	cout << "NULL" << endl;
+
+}
+//面试题18:树的子结构
+struct BinaryTreeNode
+{
+	int _value;
+	BinaryTreeNode* _left;
+	BinaryTreeNode* _right;
+};
+bool DoesTreeInclude(BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2)
+{
+	if (pRoot2 == NULL)
+		return true;
+
+	if (pRoot1 == NULL)
+		return false;
+
+	if (pRoot1->_value != pRoot2->_value)
+		return false;
+
+	return DoesTreeInclude(pRoot1->_left, pRoot2->_right) && \
+		DoesTreeInclude(pRoot1->_right, pRoot2->_right);
+}
+bool HasSubTree(BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2)
+{
+	bool result = false;
+	if (pRoot1 != NULL && pRoot2 != NULL)
+	{
+		if (pRoot1->_value == pRoot2->_value)
+			result = DoesTreeInclude(pRoot1, pRoot2);
+		if (!result)
+			result = HasSubTree(pRoot1->_left, pRoot2);
+		if (!result)
+			result = HasSubTree(pRoot1->_right, pRoot2);
+	}
+	return result;
 }
