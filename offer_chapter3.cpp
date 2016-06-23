@@ -659,7 +659,7 @@ bool DoesTreeInclude(BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2)
 	if (pRoot1->_value != pRoot2->_value)
 		return false;
 
-	return DoesTreeInclude(pRoot1->_left, pRoot2->_right) && \
+	return DoesTreeInclude(pRoot1->_left, pRoot2->_left) && \
 		DoesTreeInclude(pRoot1->_right, pRoot2->_right);
 }
 bool HasSubTree(BinaryTreeNode* pRoot1, BinaryTreeNode* pRoot2)

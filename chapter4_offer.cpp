@@ -1,5 +1,6 @@
 #include<iostream>
 #include<stack>
+#include <vector>
 #include <deque>
 #include<assert.h>
 using namespace std;
@@ -236,8 +237,134 @@ void PrintTreeFromTop(BinaryTreeNode* _root)
 		}
 	}
 }
+//面试题24：二叉搜索树的后序遍历
+bool IsPostOrder(int *arr, int length)
+{
+	if (arr == NULL || length <= 0)
+		return false;
+
+	int root = arr[length - 1];
+	int i = 0;
+	for (;i < length - 1;++i)
+	{
+		if (arr[i] > root)
+			break;
+	}
+
+	int j = i;
+	while (j<length-1)
+	{
+		if (arr[j]<root)
+		{
+			return false;
+		}
+		j++;
+	}
+	
+	bool left = true;
+	if (i>0)
+	{
+		left = IsPostOrder(arr, i);
+	}
+
+	bool right = true;
+	if (i < length - 1)
+	{
+		right = IsPostOrder(arr + i, length - i - 1);
+	}
+
+	return (left && right);
+}
+void test15()
+{
+	//int arr[] = { 5,7,6,9,10,8,11 };
+	int arr[] = { 5 };
+	cout << IsPostOrder(arr, sizeof(arr)/sizeof(arr[0])) << endl;;
+}
+//面试题25：二叉树中和为某一值的路径
+struct BinaryTreeNode
+{
+	int _value;
+	BinaryTreeNode* _left;
+	BinaryTreeNode* _right;
+};
+void FindPathOfValue(BinaryTreeNode* _root, int expectNum, int currentNum, vector<int>& path)
+{
+	currentNum += _root->_value;
+	path.push_back(_root->_value);
+
+	bool isleaf = _root->_left == NULL && _root->_right == NULL;
+	if (isleaf && currentNum == expectNum)
+	{
+		vector<int>::iterator _iter = path.begin();
+		for (;_iter != path.end();++_iter)
+		{
+			cout << *_iter << "-->";
+		}
+		cout << endl;
+	}
+	if (_root->_left)
+	{
+		FindPathOfValue(_root->_left, expectNum, currentNum, path);
+	}
+	if (_root->_right)
+	{
+		FindPathOfValue(_root->_right, expectNum, currentNum, path);
+	}
+	path.pop_back();
+}
+void FindPath(BinaryTreeNode* _root, int expectNum)
+{
+	if (_root == NULL)
+		return;
+
+	int currentNum = 0;
+	vector<int> path;
+	FindPathOfValue(_root, expectNum, currentNum, path);
+}
+//int main()
+//{
+//	test15();
+//	return 0;
+//}
+int TransDouble(int num)
+{
+	vector<int> vt;
+	int shang;
+	int yu;
+	int count = 0;
+	int RetNum = 0;
+	while (num)
+	{
+		yu=num % 2;
+		vt.push_back(yu);
+		count++;
+		num /= 2;
+	}
+
+	for (int i = 0;i < vt.size();++i)
+	{
+		RetNum += vt[count - i - 1] + (int)pow(2, i);
+	}
+	
+	return RetNum;
+}
+void DoubleOfArr(int *arr, int length)
+{
+	if (arr == NULL || length <= 0)
+		return;
+
+	for (int i = 0;i < length - 1;++i)
+	{
+		if (arr[i]%2==0)
+		{
+			arr[i] = TransDouble(arr[i]);
+		}
+	}
+}
+
 int main()
 {
-	test14();
+	cout <<TransDouble(6) << endl;
 	return 0;
 }
