@@ -3,6 +3,7 @@
 #include <vector>
 #include <deque>
 #include<assert.h>
+#include <string.h>
 using namespace std;
 
 struct BinaryTreeNode
@@ -282,12 +283,7 @@ void test15()
 	cout << IsPostOrder(arr, sizeof(arr)/sizeof(arr[0])) << endl;;
 }
 //面试题25：二叉树中和为某一值的路径
-struct BinaryTreeNode
-{
-	int _value;
-	BinaryTreeNode* _left;
-	BinaryTreeNode* _right;
-};
+
 void FindPathOfValue(BinaryTreeNode* _root, int expectNum, int currentNum, vector<int>& path)
 {
 	currentNum += _root->_value;
@@ -362,9 +358,131 @@ void DoubleOfArr(int *arr, int length)
 		}
 	}
 }
+struct ListNode
+{
+	ListNode(int value)
+		:_value(value),
+		_pString(NULL),
+		_next(NULL)
+	{}
+	int _value;
+	ListNode* _next;
+	ListNode* _pString;
+};
+typedef ListNode Node;
+//面试题26：复杂链表的复制
+void CloneNode(ListNode* _head)
+{
+	Node* pNode = _head;
+	while (NULL != pNode)
+	{
+		//构造函数完成next，pstring复制
+		Node* newClone = new Node(pNode->_value);
+		newClone->_next = pNode->_next;
+		pNode->_next = newClone;
+		pNode = newClone->_next;
+	}
+}
+void FinishedPoint(Node* _phead)
+{
+	Node* pNode = _phead;
+	while (NULL != pNode)
+	{
+		Node* clone = pNode->_next;
+		if (pNode->_pString != NULL)
+		{
+			clone->_pString = pNode->_pString->_next;
+		}
+		pNode = clone->_next;
+	}
+}
+Node* DetachList(Node* _phead)
+{
+	Node* newListHead = NULL;
+	Node* newNode = NULL;
+	Node* pNode = _phead;
 
+	if (NULL != pNode)
+	{
+		newListHead = newNode = pNode->_next;
+		pNode->_next = newNode->_next;
+		pNode = pNode->_next;
+	}
+	while (NULL != pNode)
+	{
+		newNode->_next = pNode->_next;
+		newNode = newNode->_next;
+		pNode->_next = newNode->_next;
+		pNode = pNode->_next;
+	}
+	return newListHead;
+}
+Node* CopyComplex(Node* pHead)
+{
+	CloneNode(pHead);
+	FinishedPoint(pHead);
+	return DetachList(pHead);
+}
+//面试题27：二叉搜索树与双向链表
+
+void ConvertNode(BinaryTreeNode* root, BinaryTreeNode** pLastNodeInLast)
+{
+	if (root == NULL)
+		return;
+
+	BinaryTreeNode* pCurrent = root;
+	if (pCurrent->_left != NULL)
+		ConvertNode(pCurrent->_left, pLastNodeInLast);
+
+	pCurrent->_left = *pLastNodeInLast;
+	if (*pLastNodeInLast != NULL)
+		(*pLastNodeInLast)->_right = pCurrent;
+
+	*pLastNodeInLast = pCurrent;
+	if (pCurrent->_right != NULL)
+		ConvertNode(pCurrent->_right, pLastNodeInLast);
+}
+BinaryTreeNode* Convert(BinaryTreeNode* _root)
+{
+	BinaryTreeNode* pLastNodeInList = NULL;
+	ConvertNode(_root, &pLastNodeInList);
+
+	BinaryTreeNode* newListHead = NULL;
+	while (newListHead && newListHead->_right)
+		newListHead = pLastNodeInList->_left;
+
+	return newListHead;
+}
+//面试题28：字符串的全排列
+
+void _Permiutation(char *str,int start,int end)
+{
+	if (start == end)
+	{
+		for (int i = 0;i <= end;++i)
+		{
+			cout << str[i];
+		}
+		cout << endl;
+	}
+	for (int i = start;i < end;++i)
+	{
+		swap(str[start], str[i]);
+		_Permiutation(str, start + 1, end);
+		swap(str[start], str[i]);
+	}
+}
+void Permiutation(char *str)
+{
+	if (str == NULL)
+		return;
+
+	_Permiutation(str, 0,strlen(str));
+}
 int main()
 {
-	cout <<TransDouble(6) << endl;
+	//cout <<TransDouble(6) << endl;
+	char str[] = "abc";
+	Permiutation(str);
 	return 0;
 }
